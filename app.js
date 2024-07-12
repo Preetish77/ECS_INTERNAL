@@ -60,7 +60,12 @@
         // Function to download CSV file with timestamped filename
         function downloadCSV(csv) {
             const currentDate = new Date();
-            const timestamp = `${currentDate.getFullYear()}_${pad(currentDate.getMonth() + 1)}_${pad(currentDate.getDate())}_${pad(currentDate.getHours())}${pad(currentDate.getMinutes())}${currentDate.getHours() >= 12 ? 'PM' : 'AM'}`;
+            
+            // Adjust for Central Standard Time (CST)
+            const cstOffset = -6 * 60; // CST is UTC-6
+            const utcTimestamp = new Date(currentDate.getTime() + cstOffset * 60000);
+
+            const timestamp = `${utcTimestamp.getFullYear()}_${pad(utcTimestamp.getMonth() + 1)}_${pad(utcTimestamp.getDate())}_${pad(utcTimestamp.getHours())}${pad(utcTimestamp.getMinutes())}${utcTimestamp.getHours() >= 12 ? 'PM' : 'AM'}`;
             const filename = `output_${timestamp}.csv`;
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -74,7 +79,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Function to pad single digits with leading zeros
+        // Function to pad numbers with leading zeros
         function pad(num) {
             return num.toString().padStart(2, '0');
-        }
