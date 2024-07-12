@@ -1,4 +1,4 @@
-async function processFiles() {
+ async function processFiles() {
             // Get selected files
             const fileInput = document.getElementById('fileInput');
             const files = fileInput.files;
@@ -57,17 +57,11 @@ async function processFiles() {
             return `${header}\n${csv}`;
         }
 
-        // Function to download CSV file with timestamped filename
+        // Function to download CSV file with today's date filename
         function downloadCSV(csv) {
             const currentDate = new Date();
-
-            // Adjust for Central Standard Time (CST)
-            const cstOffset = -6 * 60; // CST is UTC-6
-            const utcTimestamp = new Date(currentDate.getTime() + cstOffset * 60000);
-
-            // Format timestamp in CST
-            const timestamp = `${utcTimestamp.getFullYear()}_${pad(utcTimestamp.getMonth() + 1)}_${pad(utcTimestamp.getDate())}_${format12Hour(utcTimestamp.getHours(), utcTimestamp.getMinutes())}`;
-            const filename = `output_${timestamp}.csv`;
+            const formattedDate = `${currentDate.getFullYear()}_${pad(currentDate.getMonth() + 1)}_${pad(currentDate.getDate())}`;
+            const filename = `output_${formattedDate}.csv`;
 
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
@@ -83,12 +77,4 @@ async function processFiles() {
         // Function to pad numbers with leading zeros
         function pad(num) {
             return num.toString().padStart(2, '0');
-        }
-
-        // Function to format hours in 12-hour format with AM/PM
-        function format12Hour(hours, minutes) {
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const hour12 = hours % 12 || 12; // Convert hour to 12-hour format
-
-            return `${pad(hour12)}${pad(minutes)}${ampm}`;
         }
