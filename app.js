@@ -82,3 +82,4 @@
         // Function to pad numbers with leading zeros
         function pad(num) {
             return num.toString().padStart(2, '0');
+        }
